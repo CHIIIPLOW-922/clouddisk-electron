@@ -1,5 +1,5 @@
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-import { BrowserWindow, app, shell } from 'electron'
+import { BrowserWindow, app, shell, ipcMain, nativeTheme } from 'electron'
 import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 
@@ -11,12 +11,15 @@ function createWindow() {
     show: false,
     icon: join(__dirname, "../../resources/icon.png"),
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ||  process.platform === 'windows'? { icon } : {}),
+    ...(process.platform === 'linux' || process.platform === 'windows' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
+  //打开控制台
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -67,6 +70,16 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+ipcMain.handle("dark-mode", () => {
+  return nativeTheme.themeSource;
+});
+
+// 设置APP主题模式
+ipcMain.handle("dark-mode:change", (_, type) => {
+  nativeTheme.themeSource = type;
+  return nativeTheme.themeSource;
+});
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.

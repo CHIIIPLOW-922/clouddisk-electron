@@ -11,13 +11,21 @@ import '@/assets/cust-elementplus.scss'
 import '@/assets/icon/iconfont.css'
 
 import MessageUtils from '@/utils/MessageUtils'
+import { generateUniqueId } from './utils/UUID'
+import RequestUtils from '@/utils/RequestUtils'
+
 
 const app = createApp(App)
 
 app.use(ElementPlus)
 app.use(router)
 
+const uniqueId = generateUniqueId()
+
+
 app.config.globalProperties.MessageUtils = MessageUtils
+app.config.globalProperties.$uniqueId = uniqueId
+app.config.globalProperties.RequestUtils = RequestUtils
 
 
    

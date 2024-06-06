@@ -15,6 +15,17 @@ export default defineConfig({
         '@': resolve('src/renderer/src')
       }
     },
+    server: {
+      port: 9000,
+      hmr: true,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8080/clouddisk',
+          changeOrigin: true, // 修改请求头的 Host 为目标服务器的 URL
+          rewrite: (path) => path.replace(/^\/api/, '')
+        }
+      }
+    },
     plugins: [vue()]
   }
 })

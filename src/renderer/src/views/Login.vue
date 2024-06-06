@@ -31,6 +31,16 @@
             :prefix-icon="Lock"
           ></el-input>
         </el-form-item>
+        <el-form-item class="main-captcha" label="验证码" prop="captcha">
+          <el-input
+            class="captcha"
+            v-model.trim="loginform.captcha"
+            clearable
+            placeholder="请输入验证码"
+            :prefix-icon="FolderChecked"
+          ></el-input>
+          <img :src="captchaUrl" @click="changeCode()" />
+        </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login">登录</el-button>
           <el-button @click="switchForm">去注册</el-button>
@@ -74,7 +84,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="register-button">
-          <el-button type="primary" @click="register" >注册</el-button>
+          <el-button type="primary" @click="register">注册</el-button>
           <el-button @click="switchForm">有账号前往登录</el-button>
         </el-form-item>
       </el-form>
@@ -83,21 +93,25 @@
 </template>
 
 <script setup>
-import { Lock, User } from '@element-plus/icons-vue';
-import { getCurrentInstance, nextTick, ref } from 'vue';
+import { Lock, User, FolderChecked } from '@element-plus/icons-vue'
+import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
 const loginform = ref({})
 const loginformRef = ref()
 const registerform = ref({})
 const registerformRef = ref()
-
+const api = {
+  captcha: '/api/user/generateCaptcha'
+}
+const captchaUrl = ref()
 const register = () => {
   proxy.MessageUtils.success('注册成功')
 }
 
 const login = () => {
   proxy.MessageUtils.success('登录成功')
+  
 }
 
 const switchForm = () => {
@@ -112,6 +126,14 @@ const switchForm = () => {
     isLogin.value = !isLogin.value
   })
 }
+
+const changeCode = () => {
+  captchaUrl.value = api.captcha + "?key=" + proxy.$uniqueId + "&time="+ new Date().toLocaleString()
+}
+
+onMounted(()=>{
+  changeCode()
+})
 </script>
 
 <style>
@@ -166,14 +188,10 @@ const switchForm = () => {
 .register-button {
   margin-top: 40px;
 }
-.bounce-enter-active,
-.bounce-leave-active {
-  transition: height 0.5s ease;
+.main-captcha {
+  display: flex;
 }
-
-.bounce-enter,
-.bounce-leave-to {
-  height: 0;
-  overflow: hidden;
+.captcha {
+  width: 58%;
 }
 </style>
