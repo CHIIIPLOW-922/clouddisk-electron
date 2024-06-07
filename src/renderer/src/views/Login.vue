@@ -93,17 +93,16 @@
 </template>
 
 <script setup>
-import { FolderChecked, Lock, User } from '@element-plus/icons-vue';
-import { getCurrentInstance, nextTick, onMounted, ref } from 'vue';
+import { FolderChecked, Lock, User } from '@element-plus/icons-vue'
+import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
+import { generateCaptcha } from '@/api/Login'
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
 const loginform = ref({})
 const loginformRef = ref()
 const registerform = ref({})
 const registerformRef = ref()
-const api = {
-  captcha: '/api/user/generateCaptcha'
-}
+
 const captchaSrc = ref('')
 
 const register = () => {
@@ -111,8 +110,10 @@ const register = () => {
 }
 
 const login = () => {
+  let params = {}
+  Object.assign(params, loginform.value)
+  console.log(params)
   proxy.MessageUtils.success('登录成功')
-  
 }
 
 const switchForm = () => {
@@ -121,6 +122,7 @@ const switchForm = () => {
       loginformRef.value.resetFields()
       loginform.value = {}
     } else {
+      changeCode()
       registerformRef.value.resetFields()
       registerform.value = {}
     }
@@ -130,9 +132,7 @@ const switchForm = () => {
 
 const changeCode = async () => {
   try {
-    const response = await proxy.$http.get('/user/generateCaptcha')
-    console.log('GET Response:', response)
-    captchaSrc.value = response.result
+    captchaSrc.value = await generateCaptcha()
   } catch (error) {
     console.error('POST Error:', error)
   }
