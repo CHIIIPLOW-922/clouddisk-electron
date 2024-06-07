@@ -39,7 +39,7 @@
             placeholder="请输入验证码"
             :prefix-icon="FolderChecked"
           ></el-input>
-          <img :src="captchaUrl" @click="changeCode()" />
+          <img :src="captchaSrc" @click="changeCode()" />
         </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login">登录</el-button>
@@ -93,8 +93,8 @@
 </template>
 
 <script setup>
-import { Lock, User, FolderChecked } from '@element-plus/icons-vue'
-import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
+import { FolderChecked, Lock, User } from '@element-plus/icons-vue';
+import { getCurrentInstance, nextTick, onMounted, ref } from 'vue';
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
 const loginform = ref({})
@@ -104,7 +104,8 @@ const registerformRef = ref()
 const api = {
   captcha: '/api/user/generateCaptcha'
 }
-const captchaUrl = ref()
+const captchaSrc = ref('')
+
 const register = () => {
   proxy.MessageUtils.success('注册成功')
 }
@@ -127,11 +128,17 @@ const switchForm = () => {
   })
 }
 
-const changeCode = () => {
-  captchaUrl.value = api.captcha + "?key=" + proxy.$uniqueId + "&time="+ new Date().toLocaleString()
+const changeCode = async () => {
+  try {
+    const response = await proxy.$http.get('/user/generateCaptcha')
+    console.log('GET Response:', response)
+    captchaSrc.value = response.result
+  } catch (error) {
+    console.error('POST Error:', error)
+  }
 }
 
-onMounted(()=>{
+onMounted(() => {
   changeCode()
 })
 </script>

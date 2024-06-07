@@ -11,8 +11,8 @@ import '@/assets/cust-elementplus.scss'
 import '@/assets/icon/iconfont.css'
 
 import MessageUtils from '@/utils/MessageUtils'
-import { generateUniqueId } from './utils/UUID'
 import RequestUtils from '@/utils/RequestUtils'
+import { generateUniqueId } from './utils/UUID'
 
 
 const app = createApp(App)
@@ -25,7 +25,7 @@ const uniqueId = generateUniqueId()
 
 app.config.globalProperties.MessageUtils = MessageUtils
 app.config.globalProperties.$uniqueId = uniqueId
-app.config.globalProperties.RequestUtils = RequestUtils
+app.config.globalProperties.$http = RequestUtils
 
 
    
