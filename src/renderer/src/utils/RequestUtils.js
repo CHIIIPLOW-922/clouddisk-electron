@@ -21,9 +21,9 @@ service.interceptors.request.use(
     (config) => {
         if (config.showLoading) {
             loading = ElLoading.service({
-                lock:true,
-                text:"加载中请稍等...",
-                background:"rgba(0, 0, 0, 0)",
+                lock: true,
+                text: "加载中请稍等...",
+                background: "rgba(0, 0, 0, 0)",
             })
         }
         return config
@@ -31,7 +31,7 @@ service.interceptors.request.use(
     (error) => {
         if (config.showLoading && loading) {
             loading.close()
-        }   
+        }
         MessageUtils.error("接口请求失败，请检查网络")
         return Promise.reject("接口请求失败，请检查网络")
     }
@@ -43,33 +43,34 @@ service.interceptors.response.use(
             loading.close()
         }
         const responseData = response.data;
-        if (responseData.code == 200 || response.status == 200) {
+        if (responseData.code == 200) {
             return responseData;
-        } else if (responseData.code == 901) {
+        } else if (responseData.code == 999) {
             router.push("/login?redirectUrl=" + encodeURI(router.currentRoute.value.path));
             return Promise.reject({ showError: false, msg: "登录超时" });
         } else {
             if (errorCallback) {
-                errorCallback(responseData.info);
+                errorCallback(responseData.msg);
             }
-            return Promise.reject({ showError: true, msg: responseData.info });
+            return Promise.reject({ showError: true, msg: responseData.msg });
         }
     },
     (error) => {
         if (error.config.showLoading && loading) {
             loading.close();
         }
+        MessageUtils.error("网络异常")
         return Promise.reject({ showError: true, msg: "网络异常" })
     }
 );
 
 class HttpClient {
     static post(url, params, config = {}) {
-        return service.post(url, this._parseParams(params), this._getRequestConfig(config));
+        return service.post(url, this._parseParams(params), this._getRequestConfig(config, url));
     }
 
     static get(url, config = {}) {
-        return service.get(url, { params: config.params, ...this._getRequestConfig(config) });
+        return service.get(url, { params: config.params, ...this._getRequestConfig(config, url) });
     }
 
     static _parseParams(params) {
@@ -80,9 +81,10 @@ class HttpClient {
         return formData;
     }
 
-    static _getRequestConfig(config) {
+    static _getRequestConfig(config, url) {
         const { dataType, showLoading = true, responseType = responseTypeJson } = config;
         let contentType = contentTypeForm;
+        console.log(dataType)
         if (dataType != null && dataType == 'json') {
             contentType = contentTypeJson;
         }
@@ -91,6 +93,12 @@ class HttpClient {
             'X-Requested-With': 'XMLHttpRequest',
             'X-Unique-ID': uniqueId
         }
+        if (url != "user/generateCaptcha" && url != "user/login" && url != "user/register") {
+            const token = localStorage.getItem("jwt")
+            headers.Authorization = "Bearer " + token
+        }
+
+
         return {
             onUploadProgress: (event) => {
                 if (config.uploadProgressCallback) {
