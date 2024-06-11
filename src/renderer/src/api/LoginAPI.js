@@ -1,9 +1,11 @@
 import MessageUtils from '@/utils/MessageUtils'
 import RequestUtils from '@/utils/RequestUtils'
+import { response } from 'express'
 
 const api = {
     captcha: 'user/generateCaptcha',
-    login: 'user/login'
+    login: 'user/login',
+    sendEmail: 'user/sendEmail?email='
 }
 
 export async function generateCaptcha() {
@@ -23,5 +25,14 @@ export async function userLogin(params, config) {
     } catch (error) {
         MessageUtils.error(error.msg)
         console.log(error)
+    }
+}
+
+export async function sendEmail(params, config) {
+    try {
+        const response = await RequestUtils.post(api.sendEmail+params, null, config)
+        return response    
+    } catch (error) {
+        console.log(response)
     }
 }

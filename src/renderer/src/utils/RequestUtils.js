@@ -84,7 +84,6 @@ class HttpClient {
     static _getRequestConfig(config, url) {
         const { dataType, showLoading = true, responseType = responseTypeJson } = config;
         let contentType = contentTypeForm;
-        console.log(dataType)
         if (dataType != null && dataType == 'json') {
             contentType = contentTypeJson;
         }
