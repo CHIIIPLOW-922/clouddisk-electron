@@ -119,10 +119,10 @@
 </template>
 
 <script setup>
-import { generateCaptcha, userLogin } from '@/api/LoginAPI';
-import { useAuthStore } from '@/stores/LoginStores';
-import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue';
-import { getCurrentInstance, nextTick, onMounted, ref } from 'vue';
+import { generateCaptcha, userLogin, sendEmail } from '@/api/LoginAPI'
+import { useAuthStore } from '@/stores/LoginStores'
+import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue'
+import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
 const loginform = ref({})
@@ -173,21 +173,31 @@ const switchForm = () => {
   })
 }
 
-const sendEmailValidCode = () => {
+const sendEmailValidCode = async () => {
   let count = 60
-  let timer;
+  let timer
   // 开始倒计时
   if (emailCodeFlag.value) return
+  await sendEmail(
+    { email: registerform.value.email },
+    {
+      dataType: 'json',
+      errorCallback: () => {
+        return
+      }
+    }
+  )
+  proxy.MessageUtils.success("邮件发送成功！")
   emailCodeFlag.value = true
-  sendEmailStatus.value = count + "秒后重试"
+  sendEmailStatus.value = count + '秒后重试'
 
   timer = setInterval(() => {
     count--
-    sendEmailStatus.value = count + "秒后重试"
+    sendEmailStatus.value = count + '秒后重试'
     if (count <= 0) {
       clearInterval(timer)
       emailCodeFlag.value = false
-      sendEmailStatus.value = "发送验证码"
+      sendEmailStatus.value = '发送验证码'
     }
   }, 1000)
 }
