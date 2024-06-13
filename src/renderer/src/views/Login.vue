@@ -119,9 +119,10 @@
 </template>
 
 <script setup>
-import { generateCaptcha, userLogin, sendEmail } from '@/api/LoginAPI'
+import { generateCaptcha, userLogin, sendEmail, userRegister } from '@/api/LoginAPI'
 import { useAuthStore } from '@/stores/LoginStores'
 import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue'
+import { dataType } from 'element-plus/es/components/table-v2/src/common.mjs';
 import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
@@ -134,8 +135,20 @@ const sendEmailStatus = ref('发送验证码')
 const emailCodeFlag = ref(false)
 const captchaSrc = ref('')
 
-const register = () => {
-  proxy.MessageUtils.success('注册成功')
+const register = async () => {
+  let params = {}
+  Object.assign(params, registerform.value)
+  if (Object.keys(params).length == 0) {
+    proxy.MessageUtils.error("注册信息不能为空")
+    return
+  }
+  const response = await userRegister(params, {
+    dataType: 'json',
+    errorCallback: () => {
+      return
+    }
+  })
+  proxy.MessageUtils.success(response.msg)
 }
 
 const login = async () => {
@@ -153,10 +166,10 @@ const login = async () => {
     errorCallback: () => {
       authStore.incrementFailedAttempts()
       changeCode()
+      return
     }
   })
-  response.data
-  console.log(params)
+  proxy.MessageUtils.success(response.msg)
 }
 
 const switchForm = () => {
@@ -178,7 +191,7 @@ const sendEmailValidCode = async () => {
   let timer
   // 开始倒计时
   if (emailCodeFlag.value) return
-  await sendEmail(
+  const response = await sendEmail(
     { email: registerform.value.email },
     {
       dataType: 'json',
@@ -187,7 +200,7 @@ const sendEmailValidCode = async () => {
       }
     }
   )
-  proxy.MessageUtils.success("邮件发送成功！")
+  proxy.MessageUtils.success(response.msg)
   emailCodeFlag.value = true
   sendEmailStatus.value = count + '秒后重试'
 
