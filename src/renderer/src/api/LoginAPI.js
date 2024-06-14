@@ -5,13 +5,13 @@ const api = {
     captcha: 'user/generateCaptcha',
     login: 'user/login',
     sendEmail: 'user/sendEmail',
-    register: 'user/register'
+    register: 'user/register',
+    logout: 'user/logout'
 }
 
 export async function generateCaptcha() {
     try {
-        const response = await RequestUtils.get(api.captcha)
-        return response
+        return await RequestUtils.get(api.captcha)
     } catch (error) {
         console.log(error)
     }
@@ -20,8 +20,7 @@ export async function generateCaptcha() {
 
 export async function userLogin(params, config) {
     try {
-        const response = await RequestUtils.post(api.login, params, config)
-        return response
+        return await RequestUtils.post(api.login, params, config)
     } catch (error) {
         MessageUtils.error(error.msg)
         console.log(error)
@@ -30,8 +29,7 @@ export async function userLogin(params, config) {
 
 export async function sendEmail(params, config) {
     try {
-        const response = await RequestUtils.post(api.sendEmail, params, config)
-        return response    
+        return await RequestUtils.post(api.sendEmail, params, config)
     } catch (error) {
         MessageUtils.error(error.msg)
         console.log(response)
@@ -40,8 +38,16 @@ export async function sendEmail(params, config) {
 
 export async function userRegister(params, config) {
     try {
-        const response = await RequestUtils.post(api.register, params, config)    
-        return response
+        return await RequestUtils.post(api.register, params, config)    
+    } catch (error) {
+        MessageUtils.error(error.msg)
+        console.log(error)
+    }
+}
+
+export async function userLogout(params, config) {
+    try {
+        return await RequestUtils.post(api.logout, params, config)
     } catch (error) {
         MessageUtils.error(error.msg)
         console.log(error)
