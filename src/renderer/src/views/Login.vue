@@ -119,7 +119,7 @@
 </template>
 
 <script setup>
-import { generateCaptcha, userLogin, sendEmail, userRegister } from '@/api/LoginAPI'
+import { generateCaptcha, userLogin, sendEmail, userRegister } from '@/api/UserAPI'
 import { useAuthStore } from '@/stores/LoginStores'
 import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue'
 import { dataType } from 'element-plus/es/components/table-v2/src/common.mjs';
