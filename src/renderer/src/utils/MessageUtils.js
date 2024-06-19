@@ -14,6 +14,7 @@ const showMessage = (messageOptions) => {
     }
     showingMessageFlag = true;
     currentMessageInstance = ElMessage({
+        duration:2000,
         ...messageOptions,
         onClose: () => {
             showingMessageFlag = false
@@ -29,16 +30,16 @@ const showMessage = (messageOptions) => {
 
 const message = {
     error: (msg) => {
-        showMessage({ message: msg, type: "error", duration: 2000 });
+        showMessage({ message: msg, type: "error" });
     },
     success: (msg) => {
-        showMessage({ message: msg, type: "success", duration: 2000 });
+        showMessage({ message: msg, type: "success" });
     },
     warning: (msg) => {
-        showMessage({ message: msg, type: "warning", duration: 2000 });
+        showMessage({ message: msg, type: "warning" });
     },
     info: (msg) => {
-        showMessage({ message: msg, type: "info", duration: 2000 });
+        showMessage({ message: msg, type: "info" });
     },
 }
 
