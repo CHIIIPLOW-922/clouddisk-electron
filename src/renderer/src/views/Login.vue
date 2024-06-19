@@ -122,7 +122,6 @@
 import { generateCaptcha, userLogin, sendEmail, userRegister } from '@/api/UserAPI'
 import { useAuthStore } from '@/stores/LoginStores'
 import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue'
-import { dataType } from 'element-plus/es/components/table-v2/src/common.mjs';
 import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
@@ -139,7 +138,7 @@ const register = async () => {
   let params = {}
   Object.assign(params, registerform.value)
   if (Object.keys(params).length == 0) {
-    proxy.MessageUtils.error("注册信息不能为空")
+    proxy.MessageUtils.error('注册信息不能为空')
     return
   }
   const response = await userRegister(params, {
@@ -149,6 +148,8 @@ const register = async () => {
     }
   })
   proxy.MessageUtils.success(response.msg)
+  registerformRef.value.resetFields()
+  registerform.value = {}
 }
 
 const login = async () => {
@@ -170,6 +171,10 @@ const login = async () => {
     }
   })
   proxy.MessageUtils.success(response.msg)
+  localStorage.setItem('jwt', response.data?.token)
+  //清空登录信息
+  loginformRef.value.resetFields()
+  loginform.value = {}
 }
 
 const switchForm = () => {

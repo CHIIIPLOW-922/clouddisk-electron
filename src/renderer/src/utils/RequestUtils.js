@@ -10,6 +10,7 @@ const uniqueId = generateUniqueId()
 const contentTypeForm = 'application/x-www-form-urlencoded;charset=UTF-8'
 const contentTypeJson = 'application/json'
 const responseTypeJson = "json"
+const urlFilter = ['user/register', 'user/login', 'user/generateCaptcha', 'user/sendEmail']
 
 const service = axios.create({
     baseURL: '/api',
@@ -45,7 +46,7 @@ service.interceptors.response.use(
         const responseData = response.data;
         if (responseData.code == 200) {
             return responseData;
-        } else if (responseData.code == 999) {
+        } else if (responseData.code == 555) {
             router.push("/login?redirectUrl=" + encodeURI(router.currentRoute.value.path));
             return Promise.reject({ showError: false, msg: "登录超时" });
         } else {
@@ -92,7 +93,7 @@ class HttpClient {
             'X-Requested-With': 'XMLHttpRequest',
             'X-Unique-ID': uniqueId
         }
-        if (url != "user/generateCaptcha" && url != "user/login" && url != "user/register") {
+        if (!urlFilter.includes(url)) {
             const token = localStorage.getItem("jwt")
             headers.Authorization = "Bearer " + token
         }

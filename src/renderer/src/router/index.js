@@ -16,4 +16,11 @@ const router = createRouter({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  const userInfo = localStorage.getItem("jwt");
+  if (to.meta.needLogin != null && to.meta.needLogin && userInfo == null) {
+    router.push("/login");
+  }
+  next();
+})
 export default router
