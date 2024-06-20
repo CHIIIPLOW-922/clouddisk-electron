@@ -12,7 +12,7 @@
 import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
 const userAvatar = ref('')
 const hasAvatar = ref(false)
-const defaultUserNickname = ref('default')
+const defaultUserNickname = ref('defaultt')
 </script>
 
 <style lang="scss">
@@ -31,6 +31,12 @@ const defaultUserNickname = ref('default')
       margin-top: 10px; /* 调整图片与文字之间的间距 */
       font-size: 16px; /* 根据需要调整字体大小 */
       text-align: center;
+      margin: 10px 0 0 0;
+      white-space: nowrap; /* 防止文本换行 */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 13px;
+      width: 70px;
     }
     .user-avatar {
       width: 50px;
