@@ -316,7 +316,7 @@ onMounted(() => {
 }
 .captcha-not-found{
   padding-left: 15px;
-  width: 100px;
+  width: 115px;
   height: 35px;
 }
 </style>
