@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "默认路径",
-      redirect: "/login",
+      component: () => import('@/views/frame/Frame.vue')
     },
     {
       path: "/login",
