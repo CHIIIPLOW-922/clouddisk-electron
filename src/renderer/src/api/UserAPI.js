@@ -32,7 +32,7 @@ export async function sendEmail(params, config) {
         return await RequestUtils.post(api.sendEmail, params, config)
     } catch (error) {
         MessageUtils.error(error.msg)
-        console.log(response)
+        console.log(error)
     }
 }
 

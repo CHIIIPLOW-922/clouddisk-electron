@@ -8,7 +8,6 @@
         v-show="isLogin"
         ref="loginformRef"
         :model="loginform"
-        :rules="rules"
         class="el-login"
         label-position="top"
         key="login"
@@ -44,8 +43,13 @@
             placeholder="请输入验证码"
             :prefix-icon="FolderChecked"
           ></el-input>
-          <img v-show="captchaSrc.length>0" :src="captchaSrc" @click="changeCode()" />
-          <img class="captcha-not-found" v-show="captchaSrc.length==0" src='@/assets/img/when_captcha_notfound.png' @click="changeCode()" />
+          <img v-show="captchaSrc.length > 0" :src="captchaSrc" @click="changeCode()" />
+          <img
+            class="captcha-not-found"
+            v-show="captchaSrc.length == 0"
+            src="@/assets/img/when_captcha_notfound.png"
+            @click="changeCode()"
+          />
         </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login">登录</el-button>
@@ -106,7 +110,7 @@
             type="email"
             :prefix-icon="ScaleToOriginal"
           ></el-input>
-          <el-button @click="sendEmailValidCode" :disabled="emailCodeFlag">{{
+          <el-button @click="sendEmailValidCode" :disabled="!registerform.email || emailCodeFlag">{{
             sendEmailStatus
           }}</el-button>
         </el-form-item>
@@ -134,6 +138,7 @@ const authStore = useAuthStore()
 const sendEmailStatus = ref('发送验证码')
 const emailCodeFlag = ref(false)
 const captchaSrc = ref('')
+
 
 const register = async () => {
   let params = {}
@@ -169,9 +174,9 @@ const login = async () => {
       authStore.incrementFailedAttempts()
       changeCode()
       loginform.value.captcha = ''
-      return
     }
   })
+  if (response?.code != 200) return
   proxy.MessageUtils.success(response.msg)
   localStorage.setItem('jwt', response.data?.token)
   //清空登录信息
@@ -201,12 +206,10 @@ const sendEmailValidCode = async () => {
   const response = await sendEmail(
     { email: registerform.value.email },
     {
-      dataType: 'json',
-      errorCallback: () => {
-        return
-      }
+      dataType: 'json'
     }
   )
+  if (response?.code != 200) return
   proxy.MessageUtils.success(response.msg)
   emailCodeFlag.value = true
   sendEmailStatus.value = count + '秒后重试'
@@ -225,12 +228,11 @@ const sendEmailValidCode = async () => {
 const changeCode = async () => {
   if (authStore.showCaptcha) {
     const response = await generateCaptcha({
-      errorCallback: ()=>{
+      errorCallback: () => {
         captchaSrc.value = ''
-        return;
       }
     })
-    if (response?.data == null || response?.data == undefined) {
+    if (response?.code != 200) {
       captchaSrc.value = ''
       return
     }
@@ -314,7 +316,7 @@ onMounted(() => {
   flex: 1;
   margin-right: 10px;
 }
-.captcha-not-found{
+.captcha-not-found {
   padding-left: 15px;
   width: 115px;
   height: 35px;
