@@ -14,9 +14,9 @@ import { getCurrentInstance, reactive } from 'vue';
 const { proxy } = getCurrentInstance()
 
 const locale = zhCn
-const config = reactive({
-  max: 1
-})
+// const config = reactive({
+//   max: 1
+// })
 </script>
 
 

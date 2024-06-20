@@ -9,9 +9,9 @@ const api = {
     logout: 'user/logout'
 }
 
-export async function generateCaptcha() {
+export async function generateCaptcha(config) {
     try {
-        return await RequestUtils.get(api.captcha)
+        return await RequestUtils.get(api.captcha, config)
     } catch (error) {
         console.log(error)
     }

@@ -14,7 +14,7 @@ const showMessage = (messageOptions) => {
     }
     showingMessageFlag = true;
     currentMessageInstance = ElMessage({
-        duration:2000,
+        duration:3000,
         ...messageOptions,
         onClose: () => {
             showingMessageFlag = false

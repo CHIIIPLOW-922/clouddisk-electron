@@ -44,7 +44,8 @@
             placeholder="请输入验证码"
             :prefix-icon="FolderChecked"
           ></el-input>
-          <img :src="captchaSrc" @click="changeCode()" />
+          <img v-show="captchaSrc.length>0" :src="captchaSrc" @click="changeCode()" />
+          <img class="captcha-not-found" v-show="captchaSrc.length==0" src='@/assets/img/when_captcha_notfound.png' @click="changeCode()" />
         </el-form-item>
         <el-form-item class="login-button">
           <el-button type="primary" @click="login">登录</el-button>
@@ -167,6 +168,7 @@ const login = async () => {
     errorCallback: () => {
       authStore.incrementFailedAttempts()
       changeCode()
+      loginform.value.captcha = ''
       return
     }
   })
@@ -222,7 +224,16 @@ const sendEmailValidCode = async () => {
 
 const changeCode = async () => {
   if (authStore.showCaptcha) {
-    const response = await generateCaptcha()
+    const response = await generateCaptcha({
+      errorCallback: ()=>{
+        captchaSrc.value = ''
+        return;
+      }
+    })
+    if (response?.data == null || response?.data == undefined) {
+      captchaSrc.value = ''
+      return
+    }
     captchaSrc.value = response.data
   }
 }
@@ -302,5 +313,10 @@ onMounted(() => {
   width: 60%;
   flex: 1;
   margin-right: 10px;
+}
+.captcha-not-found{
+  padding-left: 15px;
+  width: 100px;
+  height: 35px;
 }
 </style>
