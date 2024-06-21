@@ -3,13 +3,13 @@ const menuList = [
         id: "1",
         name: "全部",
         path: "/all",
-        icon: "House"
+        icon: "Grid"
     },
     {
         id: "2",
         name: "图片",
         path: "/picture",
-        icon: "CameraFilled"
+        icon: "PictureFilled"
     },
     {
         id: "3",
@@ -21,7 +21,7 @@ const menuList = [
         id: "4",
         name: "视频",
         path: "/video",
-        icon: "VideoCameraFilled"
+        icon: "VideoPlay"
     },
     {
         id: "5",

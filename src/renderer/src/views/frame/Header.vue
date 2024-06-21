@@ -25,7 +25,7 @@ const defaultUserNickname = ref('defaultt')
     align-items: center;
     display: flex;
     justify-content: center;
-    margin-left: 20px;
+    margin-left: 30px;
     margin-top: 10px;
     .user-nickname {
       margin-top: 10px; /* 调整图片与文字之间的间距 */

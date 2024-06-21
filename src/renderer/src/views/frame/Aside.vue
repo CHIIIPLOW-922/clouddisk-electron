@@ -13,10 +13,10 @@
       </el-menu>
     </div>
     <div class="disk-space">
-      <span>磁盘空间还有</span>
       <div class="disk-space-progress">
+        <div class="progress-static-text">磁盘空间还有</div>
         <el-progress :text-inside="true" :stroke-width="15" :percentage="89" :color="customColors" />
-        <div class="progress-ratio">1111111</div>
+        <div class="progress-ratio">1G/1T</div>
       </div>
     </div>
   </div>
@@ -53,8 +53,12 @@ onMounted(() => {
       border: 0;
 
       .menu-item {
-        height: 50px;
+        height: 45px;
         box-shadow: 4px 4px 6px -4px rgba(0, 0, 0, 0.1);
+        outline-offset: 1px solid #E6E6E6;
+        .item-name{
+          font-size: 12px;
+        }
       }
     }
   }
@@ -65,18 +69,19 @@ onMounted(() => {
     margin-bottom: 10px;
 
     .disk-space-progress {
-      display: flex;
+      .progress-static-text{
+        font-size: 15px;
+        margin-bottom: 5px;
+      }
       
 
       .el-progress {
-        width: 70%;
         
       }
 
       .progress-ratio {
-        margin-left: auto;
-        font-size: 13px;
-        display: flex;
+        margin-top: 5px;
+        font-size: 15px;
       }
     }
   }
