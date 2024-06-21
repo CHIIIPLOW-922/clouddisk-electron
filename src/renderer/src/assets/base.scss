@@ -130,3 +130,10 @@ body {
         width: 150px;
     }
 }
+html, body, #app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 禁止滚动条 */
+  }
+  
