@@ -33,7 +33,7 @@ const menuList = [
         id: "6",
         name: "其他",
         path: "/other",
-        icon: "Eleme"
+        icon: "MoreFilled"
     },
     {
         id: "7",
