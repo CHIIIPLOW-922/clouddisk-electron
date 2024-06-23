@@ -47,6 +47,7 @@ service.interceptors.response.use(
         if (responseData.code == 200) {
             return responseData;
         } else if (responseData.code == 555) {
+            localStorage.removeItem("jwt")
             router.push("/login?redirectUrl=" + encodeURI(router.currentRoute.value.path));
             return Promise.reject({ showError: false, msg: "登录超时" });
         } else {
