@@ -3,7 +3,7 @@ const menuList = [
         id: "1",
         name: "全部",
         path: "/all",
-        icon: "Grid"
+        icon: "Menu"
     },
     {
         id: "2",
