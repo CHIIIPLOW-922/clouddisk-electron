@@ -1,15 +1,15 @@
 <template>
   <div class="header">
     <div class="logo">
-      <img v-show="!hasAvatar" class="user-avatar" src="@/assets/img/default_user_image.png" />
-      <img v-show="hasAvatar" class="user-avatar" :src="userAvatar" />
+      <img v-if="!hasAvatar" class="user-avatar" src="@/assets/img/default_user_image.png" />
+      <img v-if="hasAvatar" class="user-avatar" :src="userAvatar" />
       <p class="user-nickname">{{ defaultUserNickname }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
+import { ref } from 'vue';
 const userAvatar = ref('')
 const hasAvatar = ref(false)
 const defaultUserNickname = ref('defaultt')

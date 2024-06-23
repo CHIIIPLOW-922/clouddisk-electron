@@ -15,7 +15,7 @@
     <div class="disk-space">
       <div class="disk-space-progress">
         <div class="progress-static-text">磁盘空间还有</div>
-        <el-progress :text-inside="true" :stroke-width="15" :percentage="89" :color="customColors" />
+        <el-progress :text-inside="true" :stroke-width="14" :percentage="90" :color="customColors" />
         <div class="progress-ratio">1G/1T</div>
       </div>
     </div>
@@ -24,7 +24,7 @@
 
 <script setup>
 import { getMenuList } from '@/constant/MenuList';
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const menuList = ref([]);
 
