@@ -3,6 +3,7 @@ import axios from 'axios';
 import MessageUtils from '@/utils/MessageUtils';
 import { generateUniqueId } from '@/utils/UUID';
 import { ElLoading } from 'element-plus';
+import router from '@/router';
 
 
 let loading = null
@@ -47,6 +48,7 @@ service.interceptors.response.use(
         if (responseData.code == 200) {
             return responseData;
         } else if (responseData.code == 555) {
+            console.log(1111)
             localStorage.removeItem("jwt")
             router.push("/login?redirectUrl=" + encodeURI(router.currentRoute.value.path));
             return Promise.reject({ showError: false, msg: "登录超时" });
@@ -96,7 +98,8 @@ class HttpClient {
         }
         if (!urlFilter.includes(url)) {
             const token = localStorage.getItem("jwt")
-            headers.Authorization = "Bearer " + token
+            headers.Authorization = `Bearer ${token}`
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
         }
 
 

@@ -128,6 +128,7 @@ import { generateCaptcha, userLogin, sendEmail, userRegister } from '@/api/UserA
 import { useAuthStore } from '@/stores/LoginStores'
 import { Box, FolderChecked, Lock, ScaleToOriginal, User } from '@element-plus/icons-vue'
 import { getCurrentInstance, nextTick, onMounted, ref } from 'vue'
+import router from '../router';
 const { proxy } = getCurrentInstance()
 const isLogin = ref(true)
 const loginform = ref({})
@@ -178,10 +179,11 @@ const login = async () => {
   })
   if (response?.code != 200) return
   proxy.MessageUtils.success(response.msg)
-  localStorage.setItem('jwt', response.data?.token)
+  localStorage.setItem('jwt', response?.data)
   //清空登录信息
   loginformRef.value.resetFields()
   loginform.value = {}
+  router.push("/frame")
 }
 
 const switchForm = () => {
@@ -228,6 +230,7 @@ const sendEmailValidCode = async () => {
 const changeCode = async () => {
   if (authStore.showCaptcha) {
     const response = await generateCaptcha({
+      showLoading: false,
       errorCallback: () => {
         captchaSrc.value = ''
       }
