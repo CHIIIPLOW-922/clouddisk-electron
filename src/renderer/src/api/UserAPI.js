@@ -6,7 +6,8 @@ const api = {
     login: 'user/login',
     sendEmail: 'user/sendEmail',
     register: 'user/register',
-    logout: 'user/logout'
+    logout: 'user/logout',
+    usedDiskSpace: 'user/usedDiskSpace'
 }
 
 export async function generateCaptcha(config) {
@@ -50,6 +51,14 @@ export async function userLogout(params, config) {
         return await RequestUtils.post(api.logout, params, config)
     } catch (error) {
         MessageUtils.error(error.msg)
+        console.log(error)
+    }
+}
+
+export async function getUsedDiskSpace(config) {
+    try {
+        return await RequestUtils.get(api.usedDiskSpace, config)
+    } catch (error) {
         console.log(error)
     }
 }
