@@ -8,7 +8,7 @@ const router = createRouter({
       path: "/",
       name: "默认路径",
       // component: () => import('@/views/frame/Frame.vue')
-      redirect: "/login"
+      redirect: "/frame"
     },
     {
       path: "/login",
@@ -18,6 +18,9 @@ const router = createRouter({
     {
       path: "/frame",
       name: "主页",
+      meta: {
+        needLogin: true
+      },
       component: () => import('@/views/frame/Frame.vue')
     }
   ]

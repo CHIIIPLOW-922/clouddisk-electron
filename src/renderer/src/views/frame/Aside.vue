@@ -19,7 +19,6 @@
     </div>
     <div class="disk-space">
       <div class="disk-space-progress">
-        <div class="progress-static-text">磁盘空间还有</div>
         <el-progress
           :text-inside="true"
           :stroke-width="14"
@@ -39,8 +38,8 @@ import { onMounted, ref } from 'vue';
 
 const menuList = ref([])
 const usedSpaceRate = ref(0)
-const usedDiskSpace = ref('')
-const totalDiskSpace = ref('')
+const usedDiskSpace = ref('0B')
+const totalDiskSpace = ref('0B')
 
 const customColors = [
   { color: '#5882FA', percentage: 90 },
@@ -94,10 +93,6 @@ onMounted(() => {
     margin-bottom: 10px;
 
     .disk-space-progress {
-      .progress-static-text {
-        font-size: 15px;
-        margin-bottom: 5px;
-      }
 
       .el-progress {
       }

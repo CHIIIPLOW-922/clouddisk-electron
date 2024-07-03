@@ -9,7 +9,7 @@
         </el-breadcrumb>
       </div>
       <div class="right-button">
-        <el-button class="grid-button" :icon="Grid" type="text" @click="test()" />
+        <el-button class="grid-button" :icon="Grid" type="text" />
       </div>
     </div>
   </div>
@@ -19,10 +19,10 @@
 import { CaretRight, Grid } from '@element-plus/icons-vue';
 import { getCurrentInstance } from 'vue';
 const {proxy} = getCurrentInstance()
-const test = ()=>{
-  const response = proxy.$http.get("/user/test")
-  console.log(response)
-}
+// const test = ()=>{
+//   const response = proxy.$http.get("/user/test")
+//   console.log(response)
+// }
 </script>
 
 <style lang="scss">
