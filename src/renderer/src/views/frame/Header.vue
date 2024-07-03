@@ -4,12 +4,12 @@
       <p>用户账号：{{ userName }}</p>
       <p>用户昵称：{{ defaultUserNickname }}</p>
       <p>邮箱：{{ userEmail }}</p>
-      <el-button class="edit-button" @click="editProfile()" type="text" size="small">编辑个人档案</el-button>
-      <el-button class="logout-button custom-logout-button" @click="logout()" type="text" size="small">退出账号</el-button>
+      <el-button class="edit-button" @click="editProfile()" link size="small" type="primary">编辑个人档案</el-button>
+      <el-button class="logout-button custom-logout-button" @click="logout()" link size="small" type="danger">退出账号</el-button>
       <template #reference>
         <div class="logo">
-          <img v-if="!hasAvatar" class="user-avatar" src="@/assets/img/default_user_image.png" />
-          <img v-if="hasAvatar" class="user-avatar-active" :src="userAvatar" />
+          <img v-if="(userAvatar == '--')" class="user-avatar" src="@/assets/img/default_user_image.png" />
+          <img v-if="!(userAvatar == '--')" class="user-avatar-active" :src="userAvatar" />
           <p class="user-nickname">{{ defaultUserNickname }}</p>
         </div>
       </template>
@@ -25,7 +25,6 @@ const { proxy } = getCurrentInstance()
 const userAvatar = ref('--')
 const userEmail = ref('--')
 const userName = ref('--')
-const hasAvatar = ref(false)
 const defaultUserNickname = ref('default')
 const getHeaderUserInfo = async () => {
   const response = await getUserInfo({
@@ -33,8 +32,7 @@ const getHeaderUserInfo = async () => {
     errorCallback: () => { }
   })
   if (response.code != 200) return
-  hasAvatar.value = true
-  userAvatar.value = response.data.userAvatarPath
+  userAvatar.value = response.data.userAvatarPath == '' || response.data.userAvatarPath == null ? '--' : response.data.userAvatarPath
   defaultUserNickname.value = response.data.userNickname
   userName.value = response.data.username
   userEmail.value = response.data.email
@@ -70,9 +68,6 @@ onMounted(() => {
   padding: 8px;
 
 
-  .user-popover {
-    padding: 0px !important;
-  }
 
   .logo {
     flex-direction: column;

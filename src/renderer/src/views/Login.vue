@@ -183,6 +183,7 @@ const login = async () => {
   //清空登录信息
   loginformRef.value.resetFields()
   loginform.value = {}
+  authStore.resetFailedAttempts()
   router.push("/frame")
 }
 
@@ -235,16 +236,13 @@ const changeCode = async () => {
         captchaSrc.value = ''
       }
     })
-    if (response?.code != 200) {
-      captchaSrc.value = ''
-      return
-    }
+    if (response?.code != 200) return
     captchaSrc.value = response.data
   }
 }
 
 onMounted(() => {
-  // changeCode()
+  changeCode()
 })
 </script>
 

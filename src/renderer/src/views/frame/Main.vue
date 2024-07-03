@@ -9,7 +9,7 @@
         </el-breadcrumb>
       </div>
       <div class="right-button">
-        <el-button class="grid-button" :icon="Grid" type="text" />
+        <el-button class="grid-button" :icon="Grid" type="primary" link />
       </div>
     </div>
   </div>
