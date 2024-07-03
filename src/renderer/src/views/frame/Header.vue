@@ -8,8 +8,8 @@
       <el-button class="logout-button custom-logout-button" @click="logout()" link size="small" type="danger">退出账号</el-button>
       <template #reference>
         <div class="logo">
-          <img v-if="(userAvatar == '--')" class="user-avatar" src="@/assets/img/default_user_image.png" />
-          <img v-if="!(userAvatar == '--')" class="user-avatar-active" :src="userAvatar" />
+          <img v-if="userAvatar == ''" class="user-avatar" src="@/assets/img/default_user_image.png" />
+          <img v-if="userAvatar != ''" class="user-avatar-active" :src="userAvatar" />
           <p class="user-nickname">{{ defaultUserNickname }}</p>
         </div>
       </template>
@@ -22,7 +22,7 @@ import { onMounted, ref, getCurrentInstance } from 'vue';
 import { getUserInfo, userLogout } from '@/api/UserAPI';
 import router from '@/router';
 const { proxy } = getCurrentInstance()
-const userAvatar = ref('--')
+const userAvatar = ref('')
 const userEmail = ref('--')
 const userName = ref('--')
 const defaultUserNickname = ref('default')
@@ -32,7 +32,7 @@ const getHeaderUserInfo = async () => {
     errorCallback: () => { }
   })
   if (response.code != 200) return
-  userAvatar.value = response.data.userAvatarPath == '' || response.data.userAvatarPath == null ? '--' : response.data.userAvatarPath
+  userAvatar.value = response.data.userAvatarPath == '' || response.data.userAvatarPath == null ? '' : response.data.userAvatarPath
   defaultUserNickname.value = response.data.userNickname
   userName.value = response.data.username
   userEmail.value = response.data.email
