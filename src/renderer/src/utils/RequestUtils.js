@@ -74,7 +74,7 @@ class HttpClient {
     }
 
     static get(url, config = {}) {
-        return service.get(url, { params: config.params, ...this._getRequestConfig(config, url) });
+        return service.get(url, this._getRequestConfig(config, url));
     }
 
     static _parseParams(params) {

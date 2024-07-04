@@ -2,15 +2,15 @@
   <div class="header">
     <el-popover class="user-popover" placement="bottom" :width="300" trigger="hover">
       <p>用户账号：{{ userName }}</p>
-      <p>用户昵称：{{ defaultUserNickname }}</p>
+      <p>用户昵称：{{ userNickname }}</p>
       <p>邮箱：{{ userEmail }}</p>
       <el-button class="edit-button" @click="editProfile()" link size="small" type="primary">编辑个人档案</el-button>
-      <el-button class="logout-button custom-logout-button" @click="logout()" link size="small" type="danger">退出账号</el-button>
+      <el-button class="logout-button custom-logout-button" link size="small" @click="logout()" type="danger">退出账号</el-button>
       <template #reference>
-        <div class="logo">
-          <img v-if="userAvatar == ''" class="user-avatar" src="@/assets/img/default_user_image.png" />
-          <img v-if="userAvatar != ''" class="user-avatar-active" :src="userAvatar" />
-          <p class="user-nickname">{{ defaultUserNickname }}</p>
+        <div class="avatar">
+          <img v-if="!hasAvatar" class="user-avatar" src="@/assets/img/default_user_image.png" />
+          <img v-if="hasAvatar" class="user-avatar-active" :src="userAvatar" />
+          <p class="user-nickname">{{ userNickname }}</p>
         </div>
       </template>
     </el-popover>
@@ -22,22 +22,35 @@ import { onMounted, ref, getCurrentInstance } from 'vue';
 import { getUserInfo, userLogout } from '@/api/UserAPI';
 import router from '@/router';
 const { proxy } = getCurrentInstance()
+const hasAvatar = ref(false)
 const userAvatar = ref('')
 const userEmail = ref('--')
 const userName = ref('--')
-const defaultUserNickname = ref('default')
+const userNickname = ref('--')
+
+/**
+ * 获取用户信息
+ * */
 const getHeaderUserInfo = async () => {
   const response = await getUserInfo({
     showLoading: false,
-    errorCallback: () => { }
+    errorCallback: () => {
+      hasAvatar.value = false
+    }
   })
   if (response.code != 200) return
-  userAvatar.value = response.data.userAvatarPath == '' || response.data.userAvatarPath == null ? '' : response.data.userAvatarPath
-  defaultUserNickname.value = response.data.userNickname
+  userAvatar.value = response.data.userAvatarPath
+  hasAvatar.value = userAvatar.value == null ? false : true
+  userNickname.value = response.data.userNickname
   userName.value = response.data.username
   userEmail.value = response.data.email
 }
+
+/**
+ * 退出账号
+ *  */
 const logout = async () => {
+  // if (!flag) return
   const response = await userLogout({
     showLoading: false,
     errorCallback: () => { }
@@ -69,7 +82,7 @@ onMounted(() => {
 
 
 
-  .logo {
+  .avatar {
     flex-direction: column;
     align-items: center;
     display: flex;
